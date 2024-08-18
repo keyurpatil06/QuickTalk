@@ -7,9 +7,11 @@ import { toast } from "sonner";
 import { SIGNUP_ROUTE, LOGIN_ROUTE } from "@/utils/constants";
 import { apiClient } from "@/lib/api-client";
 import { useNavigate } from "react-router-dom";
+import { useAppStore } from "@/store";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { setUserInfo } = useAppStore();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,18 +61,24 @@ const Auth = () => {
 
   const handleLogin = async () => {
     if (validateLogin()) {
-      const response = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
-      console.log(response.data)
-      if (response.data.user.id) {
-        setUserInfo(response.data.user);
-        if (response.data.user.profileSetup) {
-          navigate('/chat')
+      try {
+        const response = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
+        console.log(response.data)
+
+        if (response.data.user.id) {
+          setUserInfo(response.data.user);
+          if (response.data.user.profileSetup) {
+            navigate('/chat')
+          }
+          else {
+            navigate("/profile");
+          }
         }
-        else {
-          navigate("/profile");
-        }
+
+        console.log({ response });
+      } catch (error) {
+        console.log(error);
       }
-      console.log({ response });
     }
   }
 
@@ -79,7 +87,7 @@ const Auth = () => {
       try {
         const response = await apiClient.post(SIGNUP_ROUTE, { email, password }, { withCredentials: true });
         if (response.status === 201) {
-          // setUserInfo(response.data.user);
+          setUserInfo(response.data.user);
           navigate("/profile");
         }
         console.log({ response });
@@ -91,16 +99,15 @@ const Auth = () => {
 
   const handleOtp = async () => {
     setLoading(true);
-    console.log({ email });
 
     try {
       await apiClient.post('/send-otp', { email, otp });
       toast.success('OTP sent successfully!');
     } catch (error) {
       console.log(error);
-      
       toast.error('Failed to send OTP. Please try again.');
     }
+
     setLoading(false);
   }
 

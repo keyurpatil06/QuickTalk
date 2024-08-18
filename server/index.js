@@ -36,9 +36,9 @@ const transporter = nodemailer.createTransport({
 
 app.post('/send-otp', async (req, res) => {
     const { email, otp } = req.body;
-    console.log(process.env.EMAIL_USER);
-    console.log(process.env.PASS_USER);
-    console.log(process.env.ORIGIN);
+    // console.log(process.env.EMAIL_USER);
+    // console.log(process.env.PASS_USER);
+    // console.log(process.env.ORIGIN);
 
     try {
         await transporter.sendMail({
