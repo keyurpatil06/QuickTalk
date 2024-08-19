@@ -25,7 +25,7 @@ export const signup = async (request, response) => {
       secure: true,
       sameSite: "None",
     });
-    
+
     return response.status(201).json({
       user: {
         id: user.id,
@@ -56,6 +56,7 @@ export const login = async (request, response, next) => {
 
     const auth = await compare(password, user.password);
     console.log(auth)
+
     if (!auth) {
       return response.status(400).send("Password is incorrecyyyt");
     }
@@ -63,7 +64,8 @@ export const login = async (request, response, next) => {
       maxAge,
       secure: true,
       sameSite: "None",
-    });
+    })
+
     return response.status(200).json({
       user: {
         id: user.id,
@@ -74,9 +76,43 @@ export const login = async (request, response, next) => {
         image: user.image,
         color: user.color,
       },
-    });
+    })
   } catch (error) {
-    console.log({ error });
-    return response.status(500).send("Inernal Server Error");
+    console.log({ error })
+    return response.status(500).send("Inernal Server Error")
+  }
+}
+
+export const getUserInfo = async (request, response, next) => {
+  try {
+    const userData = await User.findById(request.userId);
+
+    if (!userData) {
+      return response.status(404).send("User with the given id not found")
+    }
+
+    console.log(
+      {
+        id: userData.id, email: userData.email,
+        profileSetup: userData.profileSetup,
+        firstName: userData.firstName,
+        lastName: userData.lastName,
+        image: userData.image,
+        color: userData.color,
+      }
+    );
+
+
+    return response.status(200).json({
+      id: userData.id, email: userData.email,
+      profileSetup: userData.profileSetup,
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      image: userData.image,
+      color: userData.color,
+    })
+  } catch (error) {
+    console.log({ error })
+    return response.status(500).send("Inernal Server Error")
   }
 }

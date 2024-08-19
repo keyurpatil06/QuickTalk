@@ -22,7 +22,7 @@ const Auth = () => {
   useEffect(() => {
     setOtp(Math.floor(Math.random() * 1000000))
   }, [])
-  console.log(otp);
+  // console.log(otp);
 
   const validateLogin = () => {
     if (!email.length) {
@@ -98,6 +98,9 @@ const Auth = () => {
   }
 
   const handleOtp = async () => {
+    if (email === '') {
+      return toast.error("Enter email first")
+    }
     setLoading(true);
 
     try {
