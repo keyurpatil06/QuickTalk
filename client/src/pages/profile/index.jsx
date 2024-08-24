@@ -26,9 +26,55 @@ const Profile = () => {
   const [selectedColor, setSelectedColor] = useState(0);
   const fileInputRef = useRef(null);
 
-  const saveChanges = async()=>{
+  useEffect(() => {
+    if (userInfo.profileSetup) {
+      setFirstName(userInfo.firstName);
+      setLastName(userInfo.lastName);
+      setSelectedColor(userInfo.color);
+    }
+    if (userInfo.image) {
+      setImage(`${HOST}/${userInfo.image}`);
+    }
+  }, [userInfo]);
 
+  const validateProfile = () => {
+    if (!firstName) {
+      toast.error("First Name is required");
+      return false;
+    }
+    if (!lastName) {
+      toast.error("Last Name is required");
+      return false;
+    }
+    return true;
+  };
+
+  const saveChanges = async()=>{
+     if (validateProfile()) {
+       try {
+         const response = await apiClient.post(
+           UPDATE_PROFILE_ROUTE,
+           { firstName, lastName, color: selectedColor },
+           { withCredentials: true }
+         );
+         if (response.status === 200 && response.data) {
+           setUserInfo({ ...response.data });
+           toast.success("Profile updated successfully.");
+           navigate("/chat");
+         }
+       } catch (error) {
+         console.log({ error });
+       }
+     }
   }
+
+  const handleNavigate = () => {
+    if (userInfo.profileSetup) {
+      navigate("/chat");
+    } else {
+      toast.error("Please setup profile.");
+    }
+  };
 
   return (
     <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
