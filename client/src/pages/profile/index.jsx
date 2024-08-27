@@ -49,23 +49,23 @@ const Profile = () => {
     return true;
   };
 
-  const saveChanges = async()=>{
-     if (validateProfile()) {
-       try {
-         const response = await apiClient.post(
-           UPDATE_PROFILE_ROUTE,
-           { firstName, lastName, color: selectedColor },
-           { withCredentials: true }
-         );
-         if (response.status === 200 && response.data) {
-           setUserInfo({ ...response.data });
-           toast.success("Profile updated successfully.");
-           navigate("/chat");
-         }
-       } catch (error) {
-         console.log({ error });
-       }
-     }
+  const saveChanges = async () => {
+    if (validateProfile()) {
+      try {
+        const response = await apiClient.post(
+          UPDATE_PROFILE_ROUTE,
+          { firstName, lastName, color: selectedColor },
+          { withCredentials: true }
+        );
+        if (response.status === 200 && response.data) {
+          setUserInfo({ ...response.data });
+          toast.success("Profile updated successfully.");
+          navigate("/chat");
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
   }
 
   const handleNavigate = () => {
@@ -96,7 +96,7 @@ const Profile = () => {
       }
     }
   };
-  
+
   const handleDeleteImage = async () => {
     try {
       const response = await apiClient.delete(REMOVE_PROFILE_IMAGE_ROUTE, {
@@ -145,7 +145,10 @@ const Profile = () => {
               )}
             </Avatar>
             {hovered && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer ring-fuchsia-50">
+              <div
+                className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer ring-fuchsia-50"
+                onClick={image ? handleDeleteImage : handleFileInputClick}
+              >
                 {image ? (
                   <FaTrash className="text-white text-3xl cursor-pointer" />
                 ) : (
@@ -194,11 +197,10 @@ const Profile = () => {
               {colors.map((color, index) => (
                 <div
                   className={`${color} h-8 w-8 rounded-full cursor-pointer transition-all duration-300  
-                  ${
-                    selectedColor === index
+                  ${selectedColor === index
                       ? "outline outline-white/50 outline-1"
                       : ""
-                  }}
+                    }}
                     `}
                   key={index}
                   onClick={() => setSelectedColor(index)}

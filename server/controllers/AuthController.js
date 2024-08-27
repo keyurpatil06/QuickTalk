@@ -117,7 +117,6 @@ export const getUserInfo = async (request, response, next) => {
   }
 }
 
-
 export const updateProfile = async (request, response, next) => {
   try {
     const { userId } = request;
@@ -133,6 +132,7 @@ export const updateProfile = async (request, response, next) => {
       { firstName, lastName, color, profileSetup: true },
       { new: true, runValidators: true }
     );
+
     return response.status(200).json({
       id: userData.id,
       email: userData.email,
@@ -162,6 +162,7 @@ export const addProfileImage = async (request, response, next) => {
       { image: fileName },
       { new: true, runValidators: true }
     );
+
     return response.status(200).json({
       image: updatedUser.image,
     });
@@ -170,6 +171,7 @@ export const addProfileImage = async (request, response, next) => {
     return response.status(500).send("Inernal Server Error");
   }
 };
+
 export const removeProfileImage = async (request, response, next) => {
   try {
     const { userId } = request;
@@ -190,6 +192,21 @@ export const removeProfileImage = async (request, response, next) => {
     return response.status(200).send("Profile image removed successfully.");
   } catch (error) {
     console.log({ error });
+    return response.status(500).send("Inernal Server Error");
+  }
+};
+
+export const logout = async (request, response, next) => {
+  try {
+    response.cookie("jwt", "", {
+      maxAge: 1,
+      secure: true,
+      sameSite: "None"
+    });
+
+    return response.status(200).send("Logout successfull.")
+  } catch (error) {
+    console.log(error);
     return response.status(500).send("Inernal Server Error");
   }
 };
