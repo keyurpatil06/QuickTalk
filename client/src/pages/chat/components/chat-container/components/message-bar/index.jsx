@@ -1,34 +1,58 @@
-import EmojiPicker from "emoji-picker-react"
-import { useEffect, useRef, useState } from "react"
-import { GrAttachment } from "react-icons/gr"
-import { IoSend } from "react-icons/io5"
-import { RiEmojiStickerLine } from "react-icons/ri"
+import { useAppStore } from "@/store";
+import { useSocket } from "@/context/SocketContext";
+import EmojiPicker from "emoji-picker-react";
+import { useEffect, useRef, useState } from "react";
+import { GrAttachment } from "react-icons/gr";
+import { IoSend } from "react-icons/io5";
+import { RiEmojiStickerLine } from "react-icons/ri";
 
 const MessageBar = () => {
-  const emojiRef = useRef()
-  const [message, setMessage] = useState("")
-  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false)
+  const emojiRef = useRef();
+  const [message, setMessage] = useState("");
+  const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
+  const socket = useSocket();
+  const { selectedChatType, selectedChatData, userInfo } = useAppStore();
+  
 
   useEffect(() => {
     function handleClickOutside(event) {
       if (emojiRef.current && !emojiRef.current.contains(event.target)) {
-        setEmojiPickerOpen(false)
+        setEmojiPickerOpen(false);
       }
     }
 
-    document.addEventListener("mousedown", handleClickOutside)
-    
+    document.addEventListener("mousedown", handleClickOutside);
+
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside)
-    }
-  }, [])
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleAddEmoji = (emoji) => {
-    setMessage((msg) => msg + emoji.emoji)
-  }
+    setMessage((msg) => msg + emoji.emoji);
+  };
 
   const handleSendMessage = () => {
-  }
+    if (socket && selectedChatType === "contact") {
+      console.log("Sending message:", {
+        sender: userInfo.id,
+        content: message,
+        recipient: selectedChatData._id,
+        messageType: "text",
+        fileURL: undefined,
+      });
+      socket.emit("sendMessage", {
+        sender: userInfo.id,
+        content: message,
+        recipient: selectedChatData._id,
+        messageType: "text",
+        fileURL: undefined,
+      });
+      setMessage(""); // Clear the input after sending
+    } else {
+      console.error("Socket not initialized or chat type is not 'contact'");
+    }
+  };
 
   return (
     <div className="h-[10vh] bg-[#1c1d25] flex items-center justify-center px-8 mb-5 gap-6">
@@ -67,7 +91,7 @@ const MessageBar = () => {
         <IoSend className="text-2xl" />
       </button>
     </div>
-  )
-}
+  );
+};
 
-export default MessageBar
+export default MessageBar;
