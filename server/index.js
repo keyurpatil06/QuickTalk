@@ -6,6 +6,8 @@ import mongoose from "mongoose";
 import authRoutes from "./routes/AuthRoutes.js";
 import contactsRoutes from "./routes/ContactRoutes.js";
 import nodemailer from 'nodemailer'
+import setupSocket from "./socket.js";
+import messagesRoutes from "./routes/MessagesRoute.js";
 
 dotenv.config();
 
@@ -26,6 +28,8 @@ app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
+app.use("/api/messages", messagesRoutes);
+
 
 const transporter = nodemailer.createTransport({
     pool: true,
@@ -61,5 +65,7 @@ app.post('/send-otp', async (req, res) => {
 const server = app.listen(port, () => {
     console.log(`server is running at http://localhost:${port}`);
 })
+
+setupSocket(server);
 
 mongoose.connect(databaseURL).then(() => console.log('DB Connection successful')).catch(err => console.log(err.message));
