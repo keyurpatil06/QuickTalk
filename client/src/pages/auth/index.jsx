@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import Background from "@/assets/authPage.jpg";
+import Background from "@/assets/display.svg";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsContent, TabsTrigger, TabsList } from "@radix-ui/react-tabs";
 import { Button } from "@/components/ui/button";
@@ -115,15 +115,15 @@ const Auth = () => {
   }
 
   return (
-    <div className="h-[100vh] w-[100vw] flex items-center justify-center">
+    <div className="h-[100vh] w-[100vw] flex items-center justify-center bg-[#EFF6FC]">
       <div className="h-[80vh] bg-white border-2 border-white text-opacity-90 shadow-2xl w-[80vw] md:w-[90vw] lg:w-[70vw] xl:w-[60vw] rounded-3xl grid xl:grid-cols-2">
-        <div className="flex flex-col gap-10 items-center justify-center bg-gray-100 rounded-3xl">
+        <div className="flex flex-col gap-10 items-center justify-center bg-slate-50 rounded-3xl">
           <div className="flex items-center justify-center flex-col">
             <div className="flex items-center justify-center">
               <h1 className="text-5xl font-bold md:text-6xl">Welcome</h1>
             </div>
-            <p className="font-medium text-center">
-              Fill in the details to get started with the best chat App!
+            <p className="font-medium my-2 text-center text-2xl">
+              Fill in the details to get started!
             </p>
           </div>
           <div className="flex items-center justify-center w-full">
@@ -146,54 +146,55 @@ const Auth = () => {
                 <Input
                   placeholder="Email"
                   type="email"
-                  className="rounded-full p-6"
+                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
-                  className="rounded-full p-6"
+                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
-                <Button className="rounded-full p-6" onClick={handleLogin}>
+                <Button className="rounded-2xl bg-black px-4 py-6 font-semibold text-base" onClick={handleLogin}>
                   Login
                 </Button>
               </TabsContent>
+
               <TabsContent className="flex flex-col gap-5" value="signup">
                 <Input
                   placeholder="Email"
                   type="email"
-                  className="rounded-full p-6"
+                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
-                  className="rounded-full p-6"
+                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Confirm Password"
                   type="password"
-                  className="rounded-full p-6"
+                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Enter OTP"
                   type="text"
-                  className="rounded-full p-6"
+                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={otpUser}
                   onChange={(e) => setOtpUser(e.target.value)}
                 />
-                <Button disabled={!loading} className="rounded-full p-6" onClick={handleOtp}>
+                <Button disabled={!loading} className="rounded-2xl bg-black px-4 py-6 font-semibold text-base" onClick={handleOtp}>
                   Send OTP
                 </Button>
-                <Button disabled={loading} className="rounded-full p-6" onClick={handleSignUp} >
+                <Button disabled={loading} className="rounded-2xl bg-black px-4 py-6 font-semibold text-base" onClick={handleSignUp} >
                   SignUp
                 </Button>
               </TabsContent>
@@ -202,11 +203,13 @@ const Auth = () => {
         </div>
 
         <div className="flex justify-center items-center">
-          <img
-            src={Background}
-            alt="background-image"
-            className="h-[570px] w-[480px]"
-          />
+          <div className="bg-[#FFE9E9] hidden xl:block h-[65vh] rounded-xl">
+            <img
+              src={Background}
+              alt='display-image'
+              className="relative left-10 -top-5"
+            />
+          </div>
         </div>
       </div>
     </div>

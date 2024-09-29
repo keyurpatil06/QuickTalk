@@ -18,63 +18,32 @@ const ContactsContainer = () => {
   }, []);
 
   return (
-    <div className="  relative md:w-[35vw] lg:w-[30vw] bg-[#1b1c24] border-2 border-[#2f303b] w-full">
-      <div className="pt-3">
-        <Logo />
+    <div className="relative md:w-[35vw] lg:w-[25vw] bg-white text-black border-r-2 w-full">
+      <div className="bg-[#fbfaff] m-4 rounded-2xl flex justify-center items-center p-3">
+        <span className="font-semibold text-3xl">Quick <span className="text-purple-500">Talk</span></span>
       </div>
-      <div className="my-5">
-        <div className="flex justify-between items-center pr-10">
-          <Title text="Direct Messages" />
+      <div className="my-4 px-4">
+        <div className="bg-[#fbfaff] flex justify-between items-center p-4 rounded-2xl my-1">
+          <Title text="People" />
           <NewDM />
         </div>
-        <div className="flex justify-between items-center pr-10">
-          <Title text="Channels" />
+        <div className="bg-[#fbfaff] flex justify-between items-center p-4 rounded-2xl my-1">
+          <Title text="Groups" />
         </div>
       </div>
-      <ProfileInfo />
-    </div>
-  );
-};
-
-export default ContactsContainer;
-
-const Logo = () => {
-  return (
-    <div className="flex p-5  justify-start items-center gap-2">
-      <svg
-        id="logo-38"
-        width="78"
-        height="32"
-        viewBox="0 0 78 32"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        {" "}
-        <path
-          d="M55.5 0H77.5L58.5 32H36.5L55.5 0Z"
-          className="ccustom"
-          fill="#8338ec"
-        ></path>{" "}
-        <path
-          d="M35.5 0H51.5L32.5 32H16.5L35.5 0Z"
-          className="ccompli1"
-          fill="#975aed"
-        ></path>{" "}
-        <path
-          d="M19.5 0H31.5L12.5 32H0.5L19.5 0Z"
-          className="ccompli2"
-          fill="#a16ee8"
-        ></path>{" "}
-      </svg>
-      <span className="text-3xl font-semibold ">Syncronus</span>
+      <div className="flex items-center justify-center">
+        <ProfileInfo />
+      </div>
     </div>
   );
 };
 
 const Title = ({ text }) => {
   return (
-    <h6 className="uppercase tracking-widest text-neutral-400 pl-10 font-light text-opacity-90 text-sm">
+    <h6 className="uppercase text-black font-semibold tracking-widest text-opacity-90 text-sm">
       {text}
     </h6>
   );
 };
+
+export default ContactsContainer;

@@ -5,9 +5,9 @@ import cookieParser from "cookie-parser";
 import mongoose from "mongoose";
 import authRoutes from "./routes/AuthRoutes.js";
 import contactsRoutes from "./routes/ContactRoutes.js";
-import nodemailer from 'nodemailer'
 import setupSocket from "./socket.js";
 import messagesRoutes from "./routes/MessagesRoute.js";
+import nodemailer from 'nodemailer'
 
 dotenv.config();
 
@@ -24,12 +24,12 @@ app.use(cors({
 app.use("/uploads/profiles", express.static("uploads/profiles"));
 
 app.use(cookieParser());
+
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
-app.use("/api/messages", messagesRoutes);
-
+app.use("/api/messages", messagesRoutes)
 
 const transporter = nodemailer.createTransport({
     pool: true,
@@ -39,20 +39,19 @@ const transporter = nodemailer.createTransport({
         user: process.env.EMAIL_USER,
         pass: process.env.PASS_USER,
     },
-    maxConnections: 1
+    maxConnections: 1,
 })
 
 app.post('/send-otp', async (req, res) => {
     const { email, otp } = req.body;
-    // console.log(process.env.EMAIL_USER);
-    // console.log(process.env.PASS_USER);
-    // console.log(process.env.ORIGIN);
+    console.log(process.env.EMAIL_USER);
+    console.log(process.env.PASS_USER);
 
     try {
         await transporter.sendMail({
             from: process.env.EMAIL_USER,
             to: email,
-            subject: 'Your chat app OTP',
+            subject: 'QuickTalk OTP',
             text: `Your OTP is ${otp}`
         });
         res.status(200).send({ success: true })

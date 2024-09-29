@@ -15,11 +15,7 @@ const ProfileInfo = () => {
 
   const logOut = async () => {
     try {
-      const response = await apiClient.post(
-        LOGOUT_ROUTE,
-        {},
-        { withCredentials: true }
-      );
+      const response = await apiClient.post(LOGOUT_ROUTE, {}, { withCredentials: true });
 
       if (response.status === 200) {
         navigate("/auth");
@@ -31,7 +27,7 @@ const ProfileInfo = () => {
   }
 
   return (
-    <div className="absolute bottom-0 h-16 flex items-center justify-between px-10 w-full bg-[#2a2b33]">
+    <div className="absolute bottom-0 h-16 flex items-center justify-between px-4 w-full bg-[#e1e5ff]">
       <div className="flex gap-3 items-center justify-center">
         <div className="w-12 h-12 relative">
           <Avatar className="h-12 w-12 rounded-full overflow-hidden">
@@ -44,7 +40,7 @@ const ProfileInfo = () => {
             ) : (
               <div
                 className={`uppercase h-12 w-32 md:w-48 md:h-12 p-2 text-white text-lg border-[1px] flex items-center justify-center rounded-full ${getColor(
-                  userInfo.color
+                  userInfo.color 
                 )}`}
               >
                 {userInfo.firstName
@@ -54,7 +50,7 @@ const ProfileInfo = () => {
             )}
           </Avatar>
         </div>
-        <div>
+        <div className='font-semibold text-lg text-gray-700'>
           {userInfo.firstName && userInfo.lastName
             ? `${userInfo.firstName}${userInfo.lastName}`
             : ""}

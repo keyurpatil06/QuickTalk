@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema({
   },
 });
 
-
 //prebuild middleware (pre and post): 
 userSchema.pre("save", async function (next) {
   const salt = await genSalt();

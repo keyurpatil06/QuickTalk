@@ -9,7 +9,7 @@ const createToken = (email, userId) => {
   return jwt.sign({ email, userId }, process.env.JWT_KEY, {
     expiresIn: maxAge,
   });
-}
+};
 
 export const signup = async (request, response) => {
   try {
@@ -37,7 +37,7 @@ export const signup = async (request, response) => {
     console.log({ error });
     return response.status(500).send("Inernal Server Error");
   }
-}
+};
 
 export const login = async (request, response, next) => {
   try {
@@ -56,7 +56,6 @@ export const login = async (request, response, next) => {
 
     const auth = await compare(password, user.password);
     console.log(auth)
-
     if (!auth) {
       return response.status(400).send("Password is incorrecyyyt");
     }
@@ -64,8 +63,7 @@ export const login = async (request, response, next) => {
       maxAge,
       secure: true,
       sameSite: "None",
-    })
-
+    });
     return response.status(200).json({
       user: {
         id: user.id,
@@ -76,33 +74,19 @@ export const login = async (request, response, next) => {
         image: user.image,
         color: user.color,
       },
-    })
+    });
   } catch (error) {
-    console.log({ error })
-    return response.status(500).send("Inernal Server Error")
+    console.log({ error });
+    return response.status(500).send("Inernal Server Error");
   }
-}
+};
 
 export const getUserInfo = async (request, response, next) => {
   try {
     const userData = await User.findById(request.userId);
-
     if (!userData) {
-      return response.status(404).send("User with the given id not found")
+      return response.status(404).send("User with the given id not found");
     }
-
-    console.log(
-      {
-        id: userData.id, email: userData.email,
-        profileSetup: userData.profileSetup,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        image: userData.image,
-        color: userData.color,
-      }
-    );
-
-
     return response.status(200).json({
       id: userData.id, email: userData.email,
       profileSetup: userData.profileSetup,
@@ -110,12 +94,12 @@ export const getUserInfo = async (request, response, next) => {
       lastName: userData.lastName,
       image: userData.image,
       color: userData.color,
-    })
+    });
   } catch (error) {
-    console.log({ error })
-    return response.status(500).send("Inernal Server Error")
+    console.log({ error });
+    return response.status(500).send("Inernal Server Error");
   }
-}
+};
 
 export const updateProfile = async (request, response, next) => {
   try {
@@ -132,7 +116,6 @@ export const updateProfile = async (request, response, next) => {
       { firstName, lastName, color, profileSetup: true },
       { new: true, runValidators: true }
     );
-
     return response.status(200).json({
       id: userData.id,
       email: userData.email,
@@ -162,7 +145,6 @@ export const addProfileImage = async (request, response, next) => {
       { image: fileName },
       { new: true, runValidators: true }
     );
-
     return response.status(200).json({
       image: updatedUser.image,
     });
@@ -183,13 +165,15 @@ export const removeProfileImage = async (request, response, next) => {
     }
 
     if (user.image) {
-      unlinkSync(user.image);
+      unlinkSync(user.image)
     }
 
     user.image = null;
     await user.save();
 
-    return response.status(200).send("Profile image removed successfully.");
+
+
+    return response.status(200).send("Profile image removed successfully.")
   } catch (error) {
     console.log({ error });
     return response.status(500).send("Inernal Server Error");
@@ -203,10 +187,9 @@ export const logout = async (request, response, next) => {
       secure: true,
       sameSite: "None"
     });
-
     return response.status(200).send("Logout successfull.")
   } catch (error) {
-    console.log(error);
+    console.log({ error });
     return response.status(500).send("Inernal Server Error");
   }
 };
