@@ -1,5 +1,6 @@
 import { Router } from "express";
 import {
+  getAllContacts,
   getContactsForDMList,
   searchContacts,
 } from "../controllers/ContactsControllers.js";
@@ -17,5 +18,6 @@ contactsRoutes.get(
   },
   getContactsForDMList
 );
+contactsRoutes.get('/get-all-contacts', verifyToken, getAllContacts);
 
 export default contactsRoutes;

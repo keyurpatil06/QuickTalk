@@ -22,6 +22,7 @@ app.use(cors({
 }))
 
 app.use("/uploads/profiles", express.static("uploads/profiles"));
+app.use('/uploads/files', express.static('uploads/files'));
 
 app.use(cookieParser());
 
@@ -32,20 +33,19 @@ app.use("/api/contacts", contactsRoutes);
 app.use("/api/messages", messagesRoutes)
 
 const transporter = nodemailer.createTransport({
-    pool: true,
-    service: 'hotmail',
-    port: 2525,
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.PASS_USER,
     },
     maxConnections: 1,
-})
+});
+
 
 app.post('/send-otp', async (req, res) => {
     const { email, otp } = req.body;
-    console.log(process.env.EMAIL_USER);
-    console.log(process.env.PASS_USER);
 
     try {
         await transporter.sendMail({
@@ -56,7 +56,6 @@ app.post('/send-otp', async (req, res) => {
         });
         res.status(200).send({ success: true })
     } catch (error) {
-        // res.status(500).send({ success: false, message: error.message });
         console.log(error.message);
     }
 })

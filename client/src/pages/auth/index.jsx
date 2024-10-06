@@ -22,7 +22,7 @@ const Auth = () => {
   useEffect(() => {
     setOtp(Math.floor(Math.random() * 1000000))
   }, [])
-  // console.log(otp);
+  console.log(otp);
 
   const validateLogin = () => {
     if (!email.length) {
@@ -51,7 +51,6 @@ const Auth = () => {
     }
     if (otpUser !== otp.toString()) {
       toast.error("Incorrect OTP");
-      console.log({ otpUser, otp });
 
       return false;
     }
@@ -166,35 +165,35 @@ const Auth = () => {
                 <Input
                   placeholder="Email"
                   type="email"
-                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
-                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Confirm Password"
                   type="password"
-                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                 />
                 <Input
                   placeholder="Enter OTP"
                   type="text"
-                  className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${loading ? 'hidden' : 'flex'}`}
                   value={otpUser}
                   onChange={(e) => setOtpUser(e.target.value)}
                 />
-                <Button disabled={!loading} className="rounded-2xl bg-black px-4 py-6 font-semibold text-base" onClick={handleOtp}>
+                <Button disabled={!loading} className={`rounded-2xl bg-black px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`} onClick={handleOtp}>
                   Send OTP
                 </Button>
-                <Button disabled={loading} className="rounded-2xl bg-black px-4 py-6 font-semibold text-base" onClick={handleSignUp} >
+                <Button className={`rounded-2xl bg-black px-4 py-6 font-semibold text-base ${loading ? 'hidden' : 'flex'}`} onClick={handleSignUp} >
                   SignUp
                 </Button>
               </TabsContent>

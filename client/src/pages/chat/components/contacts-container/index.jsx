@@ -3,15 +3,20 @@ import NewDM from "./components/new-dm";
 import ProfileInfo from "./components/profile-info";
 import { apiClient } from "@/lib/api-client";
 import { GET_DM_CONTACTS_ROUTES } from "@/utils/constants";
+import { useAppStore } from "@/store";
+import ContactList from "@/components/ContactList";
+import CreateChannel from "./components/create-channel";
 
 const ContactsContainer = () => {
+  const { directMessagesContacts, setDirectMessagesContacts } = useAppStore();
+
   useEffect(() => {
     const getContacts = async () => {
       const response = await apiClient.get(GET_DM_CONTACTS_ROUTES, {
         withCredentials: true,
       });
       if (response.data.contacts) {
-        console.log(response.data.contacts);
+        setDirectMessagesContacts(response.data.contacts);
       }
     };
     getContacts();
@@ -27,8 +32,12 @@ const ContactsContainer = () => {
           <Title text="People" />
           <NewDM />
         </div>
+        <div className="max-h-[38vh] overflow-y-auto scrollbar-hidden">
+          <ContactList contacts={directMessagesContacts} />
+        </div>
         <div className="bg-[#fbfaff] flex justify-between items-center p-4 rounded-2xl my-1">
           <Title text="Groups" />
+          <CreateChannel />
         </div>
       </div>
       <div className="flex items-center justify-center">
