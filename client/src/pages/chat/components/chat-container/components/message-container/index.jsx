@@ -6,6 +6,8 @@ import { useEffect, useRef, useState } from "react"
 import { MdFolderZip } from 'react-icons/md'
 import { IoMdArrowRoundDown } from 'react-icons/io'
 import { IoCloseSharp } from "react-icons/io5"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { getColor } from "@/lib/utils"
 
 const MessageContainer = () => {
   const scrollRef = useRef()
@@ -77,6 +79,7 @@ const MessageContainer = () => {
             </div>
           )}
           {selectedChatType === "contact" && renderDMMessages(message)}
+          {selectedChatType === "channel" && renderChannelMessages(message)}
         </div>
       )
     })
@@ -143,7 +146,52 @@ const MessageContainer = () => {
       </div>
     )
   }
-
+  const renderChannelMessages = (message) => {
+    return (
+      <div
+        className={`mt-5 ${
+          message.sender._id !== userInfo.id ? "text-left" : "text-right"
+        }`}
+      >
+        {message.messageType === "text" && (
+          <div
+            className={`${
+              message.sender._id === userInfo.id
+            } font-semibold border inline-block p-4 rounded-3xl my-1 max-w-[50%] break-words`}
+          >
+            {message.content}
+          </div>
+        )}
+        {message.sender._id !== userInfo.id ? (
+          <div className="flex items-center justify-start gap-3">
+            <Avatar className="h-8 w-8 rounded-full overflow-hidden">
+              {message.sender.image ? (
+                <AvatarImage
+                  src={`${HOST}/${message.sender.image}`}
+                  alt="profile"
+                  className="object-cover w-full h-full bg-black"
+                />
+              ) : (
+                <AvatarFallback
+                  className={`uppercase h-8 w-8 md:w-48 md:h-12 text-lg border-[1px] flex items-center justify-center rounded-full ${getColor(
+                    message.sender.color
+                  )}`}
+                >
+                  {message.sender.firstName
+                    ? message.sender.firstName.split("").shift()
+                    : message.sender.firstName.email.split("").shift()}
+                </AvatarFallback>
+              )}
+            </Avatar>
+            <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+            <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+          </div>
+        ) : (
+          <></>
+        )}
+      </div>
+    );
+  }
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] s:w-full">
   {renderMessages()}

@@ -34,24 +34,32 @@ const MessageBar = () => {
 
   const handleSendMessage = () => {
     if (socket && selectedChatType === "contact") {
-      console.log("Sending message:", {
-        sender: userInfo.id,
-        content: message,
-        recipient: selectedChatData._id,
-        messageType: "text",
-        fileUrl: undefined,
-      })
+      // console.log("Sending message:", {
+      //   sender: userInfo.id,
+      //   content: message,
+      //   recipient: selectedChatData._id,
+      //   messageType: "text",
+      //   fileUrl: undefined,
+      // })
       socket.emit("sendMessage", {
         sender: userInfo.id,
         content: message,
         recipient: selectedChatData._id,
         messageType: "text",
         fileUrl: undefined,
-      })
-      setMessage("") // Clear the input after sending
+      });
+    } else if (selectedChatType === "channel") {
+      socket.emit("send-channel-message", {
+        sender: userInfo.id,
+        content: message,
+        messageType: "text",
+        fileUrl: undefined,
+        channelId: selectedChatData._id,
+      });
     } else {
-      console.error("Socket not initialized or chat type is not 'contact'")
+      console.error("Socket not initialized or chat type is not 'contact'");
     }
+    setMessage(""); // Clear the input after sending
   }
 
   const handleAttachmentClick = () => {
@@ -69,14 +77,22 @@ const MessageBar = () => {
         const response = await apiClient.post(UPLOAD_FILE_ROUTE, formData, { withCredentials: true });
 
         if (response.status === 200 && response.data) {
-          if (selectedChatType === 'contact') {
+          if (selectedChatType === "contact") {
             socket.emit("sendMessage", {
               sender: userInfo.id,
               content: undefined,
               recipient: selectedChatData._id,
               messageType: "file",
               fileUrl: response.data.filePath,
-            })
+            });
+          } else if (selectedChatType === "channel") {
+            socket.emit("send-channel-message", {
+              sender: userInfo.id,
+              content: undefined,
+              messageType: "file",
+              fileUrl: response.data.filePath,
+              channelId: selectedChatData._id,
+            });
           }
         }
       }
