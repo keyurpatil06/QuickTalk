@@ -17,17 +17,16 @@ const port = process.env.PORT || 3001;
 const databaseURL = process.env.DATABASE_URL;
 
 app.use(cors({
-    origin: [process.env.ORIGIN],
+    origin: 'https://quick-talk-project.vercel.app',
     methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
     credentials: true,
-}))
+}));
+
+app.use(express.json());
+app.use(cookieParser());
 
 app.use("/uploads/profiles", express.static("uploads/profiles"));
 app.use('/uploads/files', express.static('uploads/files'));
-
-app.use(cookieParser());
-
-app.use(express.json());
 
 app.use("/api/auth", authRoutes);
 app.use("/api/contacts", contactsRoutes);
