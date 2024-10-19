@@ -102,6 +102,13 @@ const MessageBar = () => {
     }
   }
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
   return (
     <div className="h-[10vh] flex items-center justify-center px-5 mx-9 rounded-3xl mb-5 gap-4">
       <div className="flex-1 flex bg-[#e4f2ff] rounded-2xl items-center gap-5 pr-5">
@@ -111,6 +118,7 @@ const MessageBar = () => {
           placeholder="Type your message here..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
+          onKeyDown={handleKeyDown}
         />
         <div className="relative">
           <button

@@ -17,12 +17,11 @@ const Auth = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [otpUser, setOtpUser] = useState("");
   const [otp, setOtp] = useState("");
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setOtp(Math.floor(Math.random() * 1000000))
-  }, [])
-  // console.log(otp);
+    setOtp(Math.floor(Math.random() * 1000000));
+  }, []);
 
   const validateLogin = () => {
     if (!email.length) {
@@ -34,7 +33,7 @@ const Auth = () => {
       return false;
     }
     return true;
-  }
+  };
 
   const validateSignUp = () => {
     if (!email.length) {
@@ -51,35 +50,28 @@ const Auth = () => {
     }
     if (otpUser !== otp.toString()) {
       toast.error("Incorrect OTP");
-
       return false;
     }
-
     return true;
-  }
+  };
 
   const handleLogin = async () => {
     if (validateLogin()) {
       try {
         const response = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
-        // console.log(response.data)
-
         if (response.data.user.id) {
           setUserInfo(response.data.user);
           if (response.data.user.profileSetup) {
-            navigate('/chat')
-          }
-          else {
+            navigate("/chat");
+          } else {
             navigate("/profile");
           }
         }
-
-        // console.log({ response });
       } catch (error) {
         console.log(error);
       }
     }
-  }
+  };
 
   const handleSignUp = async () => {
     if (validateSignUp()) {
@@ -89,29 +81,34 @@ const Auth = () => {
           setUserInfo(response.data.user);
           navigate("/profile");
         }
-        // console.log({ response });
       } catch (error) {
         console.log(error);
       }
     }
-  }
+  };
 
   const handleOtp = async () => {
-    if (email === '') {
-      return toast.error("Enter email first")
+    if (email === "") {
+      return toast.error("Enter email first");
     }
     setLoading(true);
 
     try {
-      await apiClient.post('/send-otp', { email, otp });
-      toast.success('OTP sent successfully!');
+      await apiClient.post("/send-otp", { email, otp });
+      toast.success("OTP sent successfully!");
     } catch (error) {
       console.log(error);
-      toast.error('Failed to send OTP. Please try again.');
+      toast.error("Failed to send OTP. Please try again.");
     }
 
     setLoading(false);
-  }
+  };
+
+  const handleKeyDown = (e, action) => {
+    if (e.key === "Enter") {
+      action();
+    }
+  };
 
   return (
     <div className="h-[100vh] w-[100vw] flex items-center justify-center bg-[#EFF6FC]">
@@ -148,6 +145,7 @@ const Auth = () => {
                   className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleLogin)}
                 />
                 <Input
                   placeholder="Password"
@@ -155,6 +153,7 @@ const Auth = () => {
                   className="rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleLogin)}
                 />
                 <Button className="rounded-2xl bg-black px-4 py-6 font-semibold text-base" onClick={handleLogin}>
                   Login
@@ -165,35 +164,43 @@ const Auth = () => {
                 <Input
                   placeholder="Email"
                   type="email"
-                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`}
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? "hidden" : "flex"}`}
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleSignUp)}
                 />
                 <Input
                   placeholder="Password"
                   type="password"
-                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`}
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? "hidden" : "flex"}`}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleSignUp)}
                 />
                 <Input
                   placeholder="Confirm Password"
                   type="password"
-                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`}
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${!loading ? "hidden" : "flex"}`}
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleSignUp)}
                 />
                 <Input
                   placeholder="Enter OTP"
                   type="text"
-                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${loading ? 'hidden' : 'flex'}`}
+                  className={`rounded-2xl bg-[#ECECEC] px-4 py-6 font-semibold text-base ${loading ? "hidden" : "flex"}`}
                   value={otpUser}
                   onChange={(e) => setOtpUser(e.target.value)}
+                  onKeyDown={(e) => handleKeyDown(e, handleSignUp)}
                 />
-                <Button disabled={!loading} className={`rounded-2xl bg-black px-4 py-6 font-semibold text-base ${!loading ? 'hidden' : 'flex'}`} onClick={handleOtp}>
+                <Button
+                  disabled={!loading}
+                  className={`rounded-2xl bg-black px-4 py-6 font-semibold text-base ${!loading ? "hidden" : "flex"}`}
+                  onClick={handleOtp}
+                >
                   Send OTP
                 </Button>
-                <Button className={`rounded-2xl bg-black px-4 py-6 font-semibold text-base ${loading ? 'hidden' : 'flex'}`} onClick={handleSignUp} >
+                <Button className={`rounded-2xl bg-black px-4 py-6 font-semibold text-base ${loading ? "hidden" : "flex"}`} onClick={handleSignUp}>
                   SignUp
                 </Button>
               </TabsContent>
@@ -203,11 +210,7 @@ const Auth = () => {
 
         <div className="flex justify-center items-center">
           <div className="bg-[#FFE9E9] hidden xl:block h-[65vh] rounded-xl">
-            <img
-              src={Background}
-              alt='display-image'
-              className="relative left-10 -top-5"
-            />
+            <img src={Background} alt="display-image" className="relative left-10 -top-5" />
           </div>
         </div>
       </div>

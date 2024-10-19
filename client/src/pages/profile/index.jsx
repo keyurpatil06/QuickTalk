@@ -114,7 +114,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="bg-[#1b1c24] h-[100vh] flex items-center justify-center flex-col gap-10">
+    <div className="bg-slate-900 h-[100vh] flex items-center justify-center flex-col gap-10">
       <div className="flex flex-col gap-10 w-[80vw] md:w-max">
         <div onClick={handleNavigate}>
           <IoArrowBack className="text-4xl lg:text-6xl text-white/90 cursor-pointer" />
@@ -178,7 +178,7 @@ const Profile = () => {
             <div className="w-full">
               <Input
                 placeholder="First Name"
-                type="email"
+                type="text"
                 value={firstName}
                 onChange={(e) => setFirstName(e.target.value)}
                 className="rounded-lg p-6 bg-[#2c2e3b] border-none"
@@ -187,7 +187,7 @@ const Profile = () => {
             <div className="w-full">
               <Input
                 placeholder="Last Name"
-                type="email"
+                type="text"
                 value={lastName}
                 onChange={(e) => setLastName(e.target.value)}
                 className="rounded-lg p-6 bg-[#2c2e3b] border-none"
@@ -211,7 +211,7 @@ const Profile = () => {
         </div>
         <div className="w-full">
           <Button
-            className="h-16 w-full bg-purple-700 hover:bg-purple-900 transition-all duration-300"
+            className="h-16 rounded-2xl text-md w-full bg-purple-500 hover:bg-purple-600 transition-all duration-300"
             onClick={saveChanges}
           >
             Save Changes

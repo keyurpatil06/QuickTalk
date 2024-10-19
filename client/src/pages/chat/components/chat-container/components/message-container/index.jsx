@@ -87,13 +87,6 @@ const MessageContainer = () => {
       const showDate = messageDate !== lastDate
       lastDate = messageDate
 
-      // Debugging logs
-      // console.log(`Rendering message: ${message.content}`, {
-      //   sender: message.sender,
-      //   recipient: message.recipient,
-      //   timestamp: message.timestamp,
-      // })
-
       return (
         <div key={index}>
           {showDate && (
