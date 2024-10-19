@@ -10,7 +10,7 @@ import { apiClient } from "./lib/api-client"
 const PrivateRoute = ({ children }) => {
   const { userInfo } = useAppStore();
   const isAuthenticated = !!userInfo;
-  console.log(isAuthenticated);
+  // console.log(isAuthenticated);
 
   return isAuthenticated ? children : <Navigate to="/auth" />;
 }

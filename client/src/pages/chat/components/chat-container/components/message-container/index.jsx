@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api-client"
 import { useAppStore } from "@/store"
-import { GET_ALL_MESSAGES_ROUTE, HOST } from "@/utils/constants"
+import { GET_ALL_MESSAGES_ROUTE, GET_CHANNEL_MESSAGES, HOST } from "@/utils/constants"
 import moment from "moment"
 import { useEffect, useRef, useState } from "react"
 import { MdFolderZip } from 'react-icons/md'
@@ -16,6 +16,7 @@ const MessageContainer = () => {
     selectedChatMessages,
     selectedChatData,
     setSelectedChatMessages,
+    userInfo
   } = useAppStore();
   const [showImage, setShowImage] = useState(false);
   const [imageUrl, setImageUrl] = useState(null);
@@ -36,8 +37,30 @@ const MessageContainer = () => {
         console.log(`Error in get Messages function : ${error}`)
       }
     }
+
+    const getChannelMessages = async () => {
+      try {
+        const response = await apiClient.get(
+          `${GET_CHANNEL_MESSAGES}/${selectedChatData._id}`,
+          { withCredentials: true }
+        )
+
+        console.log(response);
+        
+        if (response.data.messages) {
+          setSelectedChatMessages(response.data.messages)
+        }
+      } catch (error) {
+        console.log(`Error in get Messages function : ${error}`)
+      }
+    }
+
     if (selectedChatData._id) {
-      if (selectedChatType === "contact") getMessages()
+      if (selectedChatType === "contact") {
+        getMessages();
+      } else if (selectedChatType === "channel") {
+        getChannelMessages();
+      }
     }
   }, [selectedChatData, selectedChatType, setSelectedChatMessages])
 
@@ -65,11 +88,11 @@ const MessageContainer = () => {
       lastDate = messageDate
 
       // Debugging logs
-      console.log(`Rendering message: ${message.content}`, {
-        sender: message.sender,
-        recipient: message.recipient,
-        timestamp: message.timestamp,
-      })
+      // console.log(`Rendering message: ${message.content}`, {
+      //   sender: message.sender,
+      //   recipient: message.recipient,
+      //   timestamp: message.timestamp,
+      // })
 
       return (
         <div key={index}>
@@ -146,20 +169,47 @@ const MessageContainer = () => {
       </div>
     )
   }
+
   const renderChannelMessages = (message) => {
     return (
       <div
-        className={`mt-5 ${
-          message.sender._id !== userInfo.id ? "text-left" : "text-right"
-        }`}
+        className={`mt-5 ${message.sender._id !== userInfo.id ? "text-left" : "text-right"
+          }`}
       >
         {message.messageType === "text" && (
           <div
-            className={`${
-              message.sender._id === userInfo.id
-            } font-semibold border inline-block p-4 rounded-3xl my-1 max-w-[50%] break-words`}
+            className={`${message.sender._id === userInfo.id
+              } font-semibold border inline-block p-4 rounded-3xl my-1 max-w-[50%] break-words ml-2`}
           >
             {message.content}
+          </div>
+        )}
+        {message.messageType === 'file' && (
+          <div className={`${message.sender._id === userInfo.id ? 'bg-red-300' : 'bg-purple-400'} border inline-block p-4 rounded max-w-[50%] break-words`}>
+            {checkIfImage(message.fileUrl) ? (
+              <div
+                className="cursor-pointer"
+                onClick={() => {
+                  setShowImage(true);
+                  setImageUrl(message.fileUrl);
+                }}
+              >
+                <img src={`${HOST}/${message.fileUrl}`} alt="image" height={300} width={300} />
+              </div>
+            ) : (
+              <div className="flex items-center justify-center gap-4">
+                <span className="text-white text-3xl bg-black rounded-full p-3">
+                  <MdFolderZip />
+                </span>
+                <span>{message.fileUrl.split('/').pop()}</span>
+                <span
+                  className="bg-black p-3 text-3xl rounded-full cursor-pointer transition-all duration-300 "
+                  onClick={() => downloadFile(message.fileUrl)}
+                >
+                  <IoMdArrowRoundDown className="text-white" />
+                </span>
+              </div>
+            )}
           </div>
         )}
         {message.sender._id !== userInfo.id ? (
@@ -173,7 +223,7 @@ const MessageContainer = () => {
                 />
               ) : (
                 <AvatarFallback
-                  className={`uppercase h-8 w-8 md:w-48 md:h-12 text-lg border-[1px] flex items-center justify-center rounded-full ${getColor(
+                  className={`uppercase h-8 w-8 md:w-48 md:h-8 text-md border-[1px] flex items-center justify-center rounded-full ${getColor(
                     message.sender.color
                   )}`}
                 >
@@ -183,48 +233,49 @@ const MessageContainer = () => {
                 </AvatarFallback>
               )}
             </Avatar>
-            <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
-            <span className="text-sm text-white/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+            <span className="text-sm text-black/60">{`${message.sender.firstName} ${message.sender.lastName}`}</span>
+            <span className="text-sm text-black/60">{moment(message.timestamp).format("LT")}</span>
           </div>
         ) : (
-          <></>
+          <div className="text-sm text-black/60">{moment(message.timestamp).format("LT")}</div>
         )}
       </div>
     );
   }
+
   return (
     <div className="flex-1 overflow-y-auto scrollbar-hidden p-4 px-8 md:w-[65vw] lg:w-[70vw] xl:w-[80vw] s:w-full">
-  {renderMessages()}
-  <div ref={scrollRef} />
-  {showImage && (
-    <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg flex-col">
-      <div className="p-2 bg-red-300 max-w-full max-h-full">
-        <img
-          src={`${HOST}/${imageUrl}`}
-          alt="image-display"
-          className="w-auto max-h-[80vh] object-contain"
-        />
-      </div>
-      <div className="flex gap-5 fixed top-0 mt-5">
-        <button
-          className="bg-black p-3 text-3xl rounded-full cursor-pointer transition-all duration-300"
-          onClick={() => downloadFile(message.fileUrl)}
-        >
-          <IoMdArrowRoundDown className="text-white" />
-        </button>
-        <button
-          className="bg-black p-3 text-3xl rounded-full cursor-pointer transition-all duration-300"
-          onClick={() => {
-            setShowImage(false);
-            setImageUrl(null);
-          }}
-        >
-          <IoCloseSharp className="text-white" />
-        </button>
-      </div>
+      {renderMessages()}
+      <div ref={scrollRef} />
+      {showImage && (
+        <div className="fixed z-[1000] top-0 left-0 h-[100vh] w-[100vw] flex items-center justify-center backdrop-blur-lg flex-col">
+          <div className="p-2 bg-red-300 max-w-full max-h-full">
+            <img
+              src={`${HOST}/${imageUrl}`}
+              alt="image-display"
+              className="w-auto max-h-[80vh] object-contain"
+            />
+          </div>
+          <div className="flex gap-5 fixed top-0 mt-5">
+            <button
+              className="bg-black p-3 text-3xl rounded-full cursor-pointer transition-all duration-300"
+              onClick={() => downloadFile(message.fileUrl)}
+            >
+              <IoMdArrowRoundDown className="text-white" />
+            </button>
+            <button
+              className="bg-black p-3 text-3xl rounded-full cursor-pointer transition-all duration-300"
+              onClick={() => {
+                setShowImage(false);
+                setImageUrl(null);
+              }}
+            >
+              <IoCloseSharp className="text-white" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
-  )}
-</div>
 
   )
 }

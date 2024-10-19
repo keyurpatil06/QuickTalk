@@ -52,10 +52,10 @@ export const login = async (request, response, next) => {
     if (!user) {
       return response.status(400).send("User with the given email not found");
     }
-    console.log(user.password)
+    // console.log(user.password)
 
     const auth = await compare(password, user.password);
-    console.log(auth)
+    // console.log(auth)
     if (!auth) {
       return response.status(400).send("Password is incorrecyyyt");
     }

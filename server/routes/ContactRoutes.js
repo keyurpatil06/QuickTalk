@@ -13,7 +13,7 @@ contactsRoutes.get(
   "/get-contacts-for-dm",
   verifyToken,
   (req, res, next) => {
-    console.log("Received request for get-contacts-for-dm");
+    // console.log("Received request for get-contacts-for-dm");
     next();
   },
   getContactsForDMList

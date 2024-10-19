@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose from 'mongoose';
 
 const channelSchema = new mongoose.Schema({
   name: {
@@ -9,37 +9,41 @@ const channelSchema = new mongoose.Schema({
     {
       type: mongoose.Schema.ObjectId,
       ref: 'Users',
-      required: true
+      required: true,
     }
   ],
-  admin: { type: mongoose.Schema.ObjectId, ref: 'Users', required: true },
+  admin: { 
+    type: mongoose.Schema.ObjectId, 
+    ref: 'Users', 
+    required: true 
+  },
   messages: [
     {
       type: mongoose.Schema.ObjectId,
-      ref: 'Users',
-      required: false
+      ref: 'Messages',
+      required: false,
     }
-
   ],
   createdAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
   updatedAt: {
     type: Date,
-    default: Date.now(),
+    default: Date.now,
   },
 });
 
+// Automatically update `updatedAt` field before saving
 channelSchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
-})
+});
 
 channelSchema.pre('findOneAndUpdate', function (next) {
   this.set({ updatedAt: Date.now() });
   next();
-})
+});
 
 const Channel = mongoose.model('Channels', channelSchema);
-export default Channel; 
+export default Channel;

@@ -96,7 +96,7 @@ const MessageBar = () => {
           }
         }
       }
-      console.log({ file });
+      // console.log({ file });
     } catch (error) {
       console.log(error);
     }

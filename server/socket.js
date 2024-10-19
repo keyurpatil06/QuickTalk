@@ -24,7 +24,7 @@ const setupSocket = (server) => {
 
   const sendMessage = async (message) => {
     try {
-      console.log("Received message to send:", message);
+      // console.log("Received message to send:", message);
       const senderSocketId = userSocketMap.get(message.sender);
       const recipientSocketId = userSocketMap.get(message.recipient);
 
@@ -55,7 +55,9 @@ const setupSocket = (server) => {
       timestamp: new Date(),
       fileUrl,
     });
-    const messageData = await Message.findById(createdMessage._id).populate("sender", "id email firstName lastName image color").exec();
+    const messageData = await Message.findById(createdMessage._id)
+      .populate("sender", "id email firstName lastName image color")
+      .exec();
 
     await Channel.findByIdAndUpdate(channelId, {
       $push: { messages: messageData._id },
@@ -67,21 +69,21 @@ const setupSocket = (server) => {
       ...messageData._doc,
       channelId: channel._id,
     };
-    
-    if(channel && channel.members) {
+
+    if (channel && channel.members) {
       channel.members.forEach((member) => {
         const memberSocketId = userSocketMap.get(member._id.toString());
         if (memberSocketId) {
           io.to(memberSocketId).emit("receive-channel-message", finalData);
         }
-        
       });
+
       const adminSocketId = userSocketMap.get(channel.admin._id.toString());
       if (adminSocketId) {
-        io.to(memberSocketId).emit("receive-channel-message", finalData);
+        io.to(adminSocketId).emit("receive-channel-message", finalData); // Corrected variable name
       }
     }
-  }
+  };
 
   io.on("connection", (socket) => {
     const userId = socket.handshake.query.userId;

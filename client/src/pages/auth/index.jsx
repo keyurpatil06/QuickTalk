@@ -22,7 +22,7 @@ const Auth = () => {
   useEffect(() => {
     setOtp(Math.floor(Math.random() * 1000000))
   }, [])
-  console.log(otp);
+  // console.log(otp);
 
   const validateLogin = () => {
     if (!email.length) {
@@ -62,7 +62,7 @@ const Auth = () => {
     if (validateLogin()) {
       try {
         const response = await apiClient.post(LOGIN_ROUTE, { email, password }, { withCredentials: true });
-        console.log(response.data)
+        // console.log(response.data)
 
         if (response.data.user.id) {
           setUserInfo(response.data.user);
@@ -74,7 +74,7 @@ const Auth = () => {
           }
         }
 
-        console.log({ response });
+        // console.log({ response });
       } catch (error) {
         console.log(error);
       }
@@ -89,7 +89,7 @@ const Auth = () => {
           setUserInfo(response.data.user);
           navigate("/profile");
         }
-        console.log({ response });
+        // console.log({ response });
       } catch (error) {
         console.log(error);
       }

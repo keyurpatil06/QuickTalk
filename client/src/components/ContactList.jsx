@@ -2,7 +2,7 @@ import { getColor } from '@/lib/utils';
 import { useAppStore } from '@/store'
 import { HOST } from '@/utils/constants';
 import React from 'react'
-import { Avatar } from './ui/avatar';
+import { Avatar, AvatarImage } from './ui/avatar';
 
 const ContactList = ({ contacts, isChannel = false }) => {
   const {
@@ -61,7 +61,7 @@ const ContactList = ({ contacts, isChannel = false }) => {
             {isChannel ? (
               <span>{contact.name}</span>
             ): (
-              <span>{`${contact.firstName} ${contact.lastName}`}</span>
+              <span>{contact.firstName ? `${contact.firstName} ${contact.lastName}` : contact.email}</span>
             )}
           </div>
         </div>
