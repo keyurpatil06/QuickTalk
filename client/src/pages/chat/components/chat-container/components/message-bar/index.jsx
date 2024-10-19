@@ -110,11 +110,11 @@ const MessageBar = () => {
   };
 
   return (
-    <div className="h-[10vh] flex items-center justify-center px-5 mx-9 rounded-3xl mb-5 gap-4">
+    <div className="h-[10vh] flex items-center justify-center px-5 mx-9 rounded-3xl mb-5 md:gap-4">
       <div className="flex-1 flex bg-[#e4f2ff] rounded-2xl items-center gap-5 pr-5">
         <input
           type="text"
-          className="flex-1 px-6 py-4 text-lg bg-transparent text-gray-700 focus:border-none focus:outline-none"
+          className="flex-1 md:px-6 px-4 py-3 md:py-4 text-md md:text-lg bg-transparent text-gray-700 focus:border-none focus:outline-none"
           placeholder="Type your message here..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
@@ -145,7 +145,7 @@ const MessageBar = () => {
         <input type="file" className="hidden" ref={fileInputRef} onChange={handleAttachmentChange} />
       </div>
       <button
-        className="bg-[#8417ff] rounded-xl flex items-center justify-center p-4 focus:border-none hover:bg-[#741bda] focus:bg-[#741bda] focus:outline-none focus:text-white duration-300 transition-all"
+        className="bg-[#8417ff] ml-2 rounded-xl flex items-center justify-center p-3 md:p-4 focus:border-none hover:bg-[#741bda] focus:bg-[#741bda] focus:outline-none focus:text-white duration-300 transition-all"
         onClick={handleSendMessage}
       >
         <IoSend className="text-2xl text-white -rotate-45" />

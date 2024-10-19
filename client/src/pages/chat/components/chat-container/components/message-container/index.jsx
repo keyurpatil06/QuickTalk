@@ -46,7 +46,7 @@ const MessageContainer = () => {
         )
 
         console.log(response);
-        
+
         if (response.data.messages) {
           setSelectedChatMessages(response.data.messages)
         }
@@ -123,7 +123,7 @@ const MessageContainer = () => {
       <div className={`${isSender ? "text-left" : "text-right"} mb-1`}>
         {message.messageType === "text" && (
           <div
-            className={`${messageClass} font-semibold border inline-block p-4 rounded-3xl my-1 max-w-[50%] break-words`}
+            className={`${messageClass} font-semibold border inline-block text-left p-4 rounded-3xl my-1 max-w-[50%] break-words`}
           >
             {message.content}
           </div>
@@ -172,7 +172,7 @@ const MessageContainer = () => {
         {message.messageType === "text" && (
           <div
             className={`${message.sender._id === userInfo.id
-              } font-semibold border inline-block p-4 rounded-3xl my-1 max-w-[50%] break-words ml-2`}
+              } font-semibold border inline-block p-4 rounded-3xl text-left my-1 max-w-[50%] break-words ml-2`}
           >
             {message.content}
           </div>
