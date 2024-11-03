@@ -1,6 +1,6 @@
 # Quicktalk
 
-Quicktalk is a real-time chat application built using the MERN stack, offering seamless messaging with support for private and group chats, emoji usage, file sharing, and a dark theme UI.
+Quicktalk is a real-time chat application built using the MERN stack, offering seamless messaging with support for private and group chats, emoji usage, file sharing.
 
 ## Features
 - **Real-time messaging**: Instantly send and receive messages with socket-based communication.
